@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>P.I.T.</title>
+
+    <body>
+        <h1> Welcome to the Personal Investment Tracker </h1>
+        <br><br>
+
+        <form method="POST">
+        <h5> Username: </h5> 
+        <input type="text" name="username" placeholder="Username" id="username">
+        <h5> Password: </h5>
+        <input type="password" name="password" placeholder="1234" id="password">
+        <button type="button" onclick="togglePassword()">👁️</button>
+        <br><br>
+        <button type="submit">Login</button>
+        </form>
+
+        <br><br><br><br>
+        
+        <a href="/register"> Register </a>
+        <br><br>
+        
+        
+    </body>
+    <script>
+    function togglePassword() {
+    const pass = document.getElementById("password");
+
+    if (pass.type === "password") {
+        pass.type = "text";
+    } else {
+        pass.type = "password";
+    }
+    }
+    </script>
+</html>
