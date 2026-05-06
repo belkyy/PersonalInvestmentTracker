@@ -9,11 +9,15 @@ def get_connection():
     return conn
 
 @app.route("/")
-def home():
+def index():
+    return render_template("index.html")
+
+@app.route("/dashboard")
+def dashboard():
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    return render_template("index.html")
+    return render_template("dashboard.html")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -33,7 +37,7 @@ def login():
 
         if user:
             session["user_id"] = user["id"]   
-            return redirect(url_for("home"))
+            return redirect(url_for("dashboard"))
         else:
             return "Hatalı giriş"
 
@@ -64,9 +68,6 @@ def register():
 def getCreate():
     return render_template('create.html')
 
-if __name__ == "__main__":
-    app.run(debug=True)
-
 def init_db():
     conn = get_connection()
 
@@ -82,3 +83,7 @@ def init_db():
     conn.close()
 
 init_db()
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
