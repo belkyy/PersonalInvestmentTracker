@@ -1,14 +1,78 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Dashboard</title>
 </head>
+
 <body>
 
     <h1>Hoşgeldin!</h1>
+
     <p>Başarıyla giriş yaptın 🚀</p>
 
     <a href="/">Ana Sayfa</a>
 
+    <br><br>
+
+    <a href="/add">
+        <button>Add Investment</button>
+    </a>
+
+    <br><br>
+
+    <table border="1" cellpadding="10">
+
+        <tr>
+            <th>Coin</th>
+            <th>Amount</th>
+            <th>Buy Price</th>
+            <th>Current Price</th>
+            <th>Profit / Loss</th>
+            <th>Percentage</th>
+            <th>Action</th>
+        </tr>
+
+        {% for inv in investments %}
+
+        <tr>
+
+            <td>{{ inv.coin }}</td>
+
+            <td>{{ inv.amount }}</td>
+
+            <td>{{ inv.buy_price }}</td>
+
+            <td>{{ inv.current_price }}</td>
+
+            <td>
+                {{ inv.profit_loss }}
+            </td>
+
+            <td>
+                {{ inv.percentage }}%
+            </td>
+
+            <td>
+
+                <a href="/delete/{{ inv.id }}">
+                    <button>Delete</button>
+                </a>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    
+    <div class="ticker2">
+    <iframe src="https://widget.coinlib.io/widget?type=horizontal_v2&theme=dark"
+            width="105%" height="45" scrolling="no" frameborder="0"></iframe>
+    </div>
+
 </body>
+
 </html>
