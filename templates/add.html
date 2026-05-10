@@ -2,9 +2,15 @@
 <html>
 <head>
     <title>Add Investment</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='style2.css') }}">   
 </head>
 <body>
-
+    <div id="particles-js"></div>
     <h1>Add Investment</h1>
 
     <form method="POST">
@@ -50,6 +56,44 @@
         </button>
 
     </form>
+    
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+<script>
+particlesJS("particles-js", {
+  particles: {
+    number: {
+      value: 80
+    },
+    color: {
+      value: "#00ffe1"
+    },
+    shape: {
+      type: "circle"
+    },
+    opacity: {
+      value: 0.5
+    },
+    size: {
+      value: 3
+    },
+    line_linked: {
+      enable: true,
+      distance: 150,
+      color: "#00ffe1",
+      opacity: 0.3,
+      width: 1
+    },
+    move: {
+      enable: true,
+      speed: 2
+    }
+  }
+});
+</script>
 
 </body>
+
+{% include "navbar.html" %}
+
 </html>

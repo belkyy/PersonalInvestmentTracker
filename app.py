@@ -109,9 +109,19 @@ def login():
             session["user_id"] = user["id"]   
             return redirect(url_for("dashboard"))
         else:
-            return "Hatalı giriş"
+            return render_template(
+                "login.html",
+                error="Invalid username or password"
+            )
 
     return render_template("login.html")
+
+@app.route("/logout")
+def logout():
+
+    session.clear()
+
+    return redirect(url_for("index"))
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -127,7 +137,10 @@ def register():
                         (username, password))
             conn.commit()
         except:
-            return "This user already exists!"
+            return render_template(
+            "register.html",
+            error="This username already exists"
+            )
 
         conn.close()
         return redirect(url_for("login"))
