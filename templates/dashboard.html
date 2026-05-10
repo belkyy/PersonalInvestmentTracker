@@ -1,127 +1,252 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
-    <title>Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>P.I.T Dashboard</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style2.css') }}">
+
     <link
     rel="stylesheet"
-    href="{{ url_for('static', filename='style2.css') }}">   
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
 
 </head>
 
 <body>
-    <div id="particles-js"></div>
-    <br> <br> 
-    <p> You have successfully logged in 🚀</p>
-    <h1> Welcome to the P.I.T.</h1>
 
-    <br> <br> 
+<div class="dashboard-container">
 
-    <table border="1" cellpadding="10">
+    <!-- SIDEBAR -->
 
-        <tr>
-            <th>Coin</th>
-            <th>Amount</th>
-            <th>Buy Price</th>
-            <th>Current Price</th>
-            <th>Profit / Loss</th>
-            <th>Percentage</th>
-            <th>Action</th>
-        </tr>
+    <div class="sidebar">
 
-        {% for inv in investments %}
+        <div class="logo">
 
-        <tr>
+            <div class="logo-icon">
+                <i class="fa-solid fa-chart-line"></i>
+            </div>
 
-            <td>{{ inv.coin }}</td>
+            <div>
+                <h2>P.I.T.</h2>
+                <p>Investment Tracker</p>
+            </div>
 
-            <td>{{ inv.amount }}</td>
+        </div>
 
-            <td>{{ inv.buy_price }}</td>
+        <div class="menu">
 
-            <td>{{ inv.current_price }}</td>
+            <a href="/">
+                <i class="fa-solid fa-house"></i>
+                Home
+            </a>
 
-            <td>
-                {{ inv.profit_loss }}
-            </td>
+            <a href="/dashboard">
+                <i class="fa-solid fa-chart-pie"></i>
+                Dashboard
+            </a>
 
-            <td>
-                {{ inv.percentage }}%
-            </td>
+            <a href="/add">
+                <i class="fa-solid fa-plus"></i>
+                Add Investment
+            </a>
 
-            <td>
+            <a href="/logout">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                Logout
+            </a>
 
-                <a href="/delete/{{ inv.id }}">
-                    <button>Delete</button>
-                </a>
+        </div>
 
-            </td>
+    </div>
 
-        </tr>
-        {% endfor %}
+    <!-- MAIN CONTENT -->
 
-    </table>
+    <div class="main-content">
 
-    <script>
+        <h1>
+            Welcome back,
+            <span>{{ session.get('username') }}</span>
+        </h1>
 
-    function toggleMenu(){
+        <p class="subtitle">
+            Track your investments and monitor portfolio performance.
+        </p>
 
-    const sidebar =
-        document.getElementById("sidebar");
+        <!-- STATS -->
 
-    if(sidebar.style.right === "0px"){
+        <div class="stats-container">
 
-        sidebar.style.right = "-250px";
+            <!-- TOTAL BALANCE -->
 
-    }else{
+            <div class="stat-card">
 
-        sidebar.style.right = "0px";
-    }
-}
+                <h3>Total Balance</h3>
 
-</script>
+                <h2>
+                    ${{ total_balance }}
+                </h2>
 
-<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+            </div>
 
-<script>
-particlesJS("particles-js", {
-  particles: {
-    number: {
-      value: 80
-    },
-    color: {
-      value: "#00ffe1"
-    },
-    shape: {
-      type: "circle"
-    },
-    opacity: {
-      value: 0.5
-    },
-    size: {
-      value: 3
-    },
-    line_linked: {
-      enable: true,
-      distance: 150,
-      color: "#00ffe1",
-      opacity: 0.3,
-      width: 1
-    },
-    move: {
-      enable: true,
-      speed: 2
-    }
-  }
-});
-</script>
+            <!-- PORTFOLIO P/L -->
+
+            <div class="stat-card">
+
+                <h3>P/L %</h3>
+
+                <h2>
+                    {{ portfolio_percentage }}%
+                </h2>
+
+                <span class="
+                {% if portfolio_percentage >= 0 %}
+                green
+                {% else %}
+                red
+                {% endif %}
+                ">
+
+                {% if portfolio_percentage >= 0 %}
+                    ▲ Profit
+                {% else %}
+                    ▼ Loss
+                {% endif %}
+
+                </span>
+
+            </div>
+
+            <!-- WORST ASSET -->
+
+            <div class="stat-card">
+
+                <h3>Worst Asset</h3>
+
+                {% if worst_asset %}
+
+                    <h2>
+                        {{ worst_asset }}
+                    </h2>
+
+                    <span class="red">
+                        {{ worst_percentage }}%
+                    </span>
+
+                {% else %}
+
+                    <h2>None 🎉</h2>
+
+                    <span class="green">
+                        All assets profitable
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        <!-- TABLE -->
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Coin</th>
+                        <th>Amount</th>
+                        <th>Buy Price</th>
+                        <th>Current Price</th>
+                        <th>Profit/Loss</th>
+                        <th>Percentage</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for inv in investments %}
+
+                    <tr>
+
+                        <td>{{ inv.coin }}</td>
+
+                        <td>{{ inv.amount }}</td>
+
+                        <td>${{ inv.buy_price }}</td>
+
+                        <td>${{ inv.current_price }}</td>
+
+                        <!-- PROFIT LOSS -->
+
+                        <td class="
+                        {% if inv.profit_loss >= 0 %}
+                        green
+                        {% else %}
+                        red
+                        {% endif %}
+                        ">
+
+                            ${{ inv.profit_loss }}
+
+                        </td>
+
+                        <!-- PERCENTAGE -->
+
+                        <td class="
+                        {% if inv.percentage >= 0 %}
+                        green
+                        {% else %}
+                        red
+                        {% endif %}
+                        ">
+
+                            {{ inv.percentage }}%
+
+                        </td>
+
+                        <!-- DELETE -->
+
+                        <td>
+
+                            <a href="/delete/{{ inv.id }}">
+
+                                <button class="delete-btn">
+                                    Delete
+                                </button>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
 
 </body>
-
-{% include "navbar.html" %}
 
 </html>

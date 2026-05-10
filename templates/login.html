@@ -1,13 +1,138 @@
-{% if error %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<p style="color:red;">
-    {{ error }}
-</p>
+  <title>P.I.T Login</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style3.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-{% endif %}
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+</head>
 
-<form method="POST" action="/login">
-    <input name="username" placeholder="Username">
-    <input type="password" name="password" placeholder="Password">
-    <button type="submit">Login</button>
-</form>
+<body>
+
+  <div class="background-grid"></div>
+
+    <!-- LEFT SIDE -->
+    <div class="left-side">
+
+      <a href="/" class="logo">
+
+        <div class="logo-icon">
+          <i class="fa-solid fa-chart-line"></i>
+        </div>
+
+        <div>
+          <h2>P.I.T.</h2>
+          <p>Personal Investment Tracker</p>
+        </div>
+
+      </a>
+
+      <h1 class="hero-title">
+        Track. Analyze. <span>Grow.</span>
+      </h1>
+
+      <p class="hero-text">
+        Your all-in-one dashboard for smarter investment decisions.
+      </p>
+
+      <div class="chart">
+
+        <svg viewBox="0 0 500 200">
+          <polyline
+            fill="none"
+            stroke="#3b82f6"
+            stroke-width="5"
+            points="
+              0,180
+              60,140
+              100,100
+              150,110
+              200,60
+              250,80
+              300,30
+              350,50
+              400,10
+              500,-20
+            "
+          />
+        </svg>
+
+        <div class="stat-card">
+          <h3>+8.45%</h3>
+          <p>Total Return</p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="login-card">
+
+      <div class="lock-icon">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+
+      <h1>Welcome Back!</h1>
+
+      <p class="subtitle">
+        Login to access your portfolio
+      </p>
+
+      <form class="login-form" method="POST" action="/login">
+
+        <div class="input-group">
+          <i class="fa-regular fa-user"></i>
+          <input type="text" name="username" placeholder="Username" required>
+        </div>
+
+        <div class="input-group">
+          <i class="fa-solid fa-lock"></i>
+          <input type="password" name="password" placeholder="Password" required>
+        </div>
+
+        <div class="options">
+
+          <label>
+            <input type="checkbox">
+            Remember me
+          </label>
+
+        </div>
+
+        <form method="POST" action="/login">
+          <button type="submit" class="login-btn">
+            Login
+        </form>
+          
+        </button>
+        {% if error %}
+
+      <p style="color:red;">
+     {{ error }}
+      </p>
+      {% endif %}
+
+      </form>
+
+      <div class="divider">or</div>
+
+      <div class="signup">
+        New here?
+        <a href="register">Create an account</a>
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+</html>

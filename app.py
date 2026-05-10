@@ -12,6 +12,10 @@ def get_connection():
 def index():
     return render_template("index.html")
 
+@app.route('/learn')
+def learn():
+    return render_template('learn.html')
+
 @app.route("/dashboard")
 def dashboard():
 
@@ -28,29 +32,48 @@ def dashboard():
     conn.close()
 
     prices = {
-    "BTC": 80000,
-    "ETH": 2300,
-    "SOL": 110,
-    "XRP": 1.4,
-    "BNB": 1250
+        "BTC": 80000,
+        "ETH": 2300,
+        "SOL": 110,
+        "XRP": 1.4,
+        "BNB": 1250
     }
-    
+
     investment_list = []
+    worst_asset = None
+    worst_percentage = 0
+
+    total_balance = 0
+    total_initial_value = 0
+    total_current_value = 0
+
     for inv in investments:
 
         current_price = prices[inv["coin"]]
 
         percentage = (
-            (
-                current_price - inv["buy_price"]
-            )
-            /
-            inv["buy_price"]
+            (current_price - inv["buy_price"])
+            / inv["buy_price"]
         ) * 100
 
         profit_loss = (
-            inv["amount"] * percentage /100
-        ) 
+            inv["amount"] * percentage / 100
+        )
+
+        # TOTAL BALANCE
+        total_balance += inv["amount"]
+
+        # PORTFOLIO VALUES
+        initial_value = inv["amount"] * inv["buy_price"]
+        current_value = inv["amount"] * current_price
+
+        total_initial_value += initial_value
+        total_current_value += current_value
+
+        # WORST ASSET CHECK
+        if percentage < worst_percentage:
+            worst_percentage = percentage
+            worst_asset = inv["coin"]
 
         investment_list.append({
             "id": inv["id"],
@@ -60,11 +83,29 @@ def dashboard():
             "current_price": current_price,
             "profit_loss": round(profit_loss, 2),
             "percentage": round(percentage, 2)
-     })
+        })
+
+    # TOTAL PORTFOLIO P/L %
+    if total_initial_value > 0:
+
+        portfolio_percentage = (
+            (
+                total_current_value - total_initial_value
+            )
+            /
+            total_initial_value
+        ) * 100
+
+    else:
+        portfolio_percentage = 0
 
     return render_template(
         "dashboard.html",
-        investments=investment_list
+        investments=investment_list,
+        total_balance=round(total_balance, 2),
+        portfolio_percentage=round(portfolio_percentage, 2),
+        worst_asset=worst_asset,
+        worst_percentage=round(worst_percentage, 2)
     )
 
 @app.route("/delete/<int:id>")
@@ -105,9 +146,15 @@ def login():
 
         conn.close()
 
-        if user:
-            session["user_id"] = user["id"]   
+        if user and user["password"] == password:
+
+            session["user_id"] = user["id"]
+
+            # BUNU EKLE
+            session["username"] = user["username"]
+
             return redirect(url_for("dashboard"))
+            
         else:
             return render_template(
                 "login.html",
@@ -250,4 +297,3 @@ init_db()
 
 if __name__ == "__main__":
     app.run(debug=True)
-
