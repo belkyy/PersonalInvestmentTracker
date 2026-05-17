@@ -1,99 +1,248 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Add Investment</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Investment | P.I.T</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <link
     rel="stylesheet"
-    href="{{ url_for('static', filename='style2.css') }}">   
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style2.css') }}">
+
 </head>
+
 <body>
-    <div id="particles-js"></div>
-    <h1>Add Investment</h1>
 
-    <form method="POST">
+<div class="dashboard-container">
 
-       <select name="coin">
+    <!-- SIDEBAR -->
 
-        <option value="BTC">₿ Bitcoin (BTC)</option>
+    <div class="sidebar">
 
-        <option value="ETH">◆ Ethereum (ETH)</option>
+        <div class="logo">
 
-        <option value="SOL">◎ Solana (SOL)</option>
+            <div class="logo-icon">
+                <i class="fa-solid fa-chart-line"></i>
+            </div>
 
-        <option value="XRP">✕ XRP (XRP)</option>
+            <div>
+                <h2>P.I.T.</h2>
+                <p>Investment Tracker</p>
+            </div>
 
-        <option value="BNB">🟡 Binance Coin (BNB)</option>
+        </div>
 
-    </select>
+        <div class="menu">
 
-        <br><br>
+            <a href="/">
+                <i class="fa-solid fa-house"></i>
+                Home
+            </a>
 
-        <input
-        type="number"
-        step="0.0001"
-        min="0"
-        name="amount"
-        placeholder="Amount"
-        >
+            <a href="/dashboard">
+                <i class="fa-solid fa-chart-pie"></i>
+                Dashboard
+            </a>
 
-        <br><br>
+            <a href="/add" class="active">
+                <i class="fa-solid fa-plus"></i>
+                Add Investment
+            </a>
 
-        <input
-        type="number"
-        step="0.01"
-        min="0"
-        name="buy_price"
-        placeholder="Buy Price"
-        >
+            <a href="/logout">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                Logout
+            </a>
 
-        <br><br>
+        </div>
 
-        <button type="submit">
-            Add
-        </button>
+    </div>
 
-    </form>
-    
-<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <!-- MAIN CONTENT -->
 
-<script>
-particlesJS("particles-js", {
-  particles: {
-    number: {
-      value: 80
-    },
-    color: {
-      value: "#00ffe1"
-    },
-    shape: {
-      type: "circle"
-    },
-    opacity: {
-      value: 0.5
-    },
-    size: {
-      value: 3
-    },
-    line_linked: {
-      enable: true,
-      distance: 150,
-      color: "#00ffe1",
-      opacity: 0.3,
-      width: 1
-    },
-    move: {
-      enable: true,
-      speed: 2
-    }
-  }
-});
-</script>
+    <div class="main-content">
+
+        <!-- TOP BAR -->
+
+        <div class="top-bar">
+
+            <div></div>
+
+            <div class="profile-box">
+
+                <div class="profile-icon">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+
+                <div>
+                    <p>Welcome back,</p>
+                    <span>@{{ session.get('username') }}</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- TITLE -->
+
+        <h1>
+            Add New
+            <span>Investment</span>
+        </h1>
+
+        <p class="subtitle">
+            Add a new crypto asset to your portfolio tracker.
+        </p>
+
+        <div class="glow-line"></div>
+
+        <!-- FORM CARD -->
+
+        <div class="add-card">
+
+            <div class="card-header">
+
+                <div class="card-icon">
+                    <i class="fa-solid fa-plus"></i>
+                </div>
+
+                <div>
+                    <h2>Investment Details</h2>
+                    <p>
+                        Fill in the details below to add a new investment.
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- FORM -->
+
+            <form method="POST" class="investment-form">
+
+                <!-- COIN -->
+
+                <div class="input-group">
+
+                    <label>Select Coin</label>
+
+                    <div class="input-box">
+
+                        <i class="fa-brands fa-bitcoin"></i>
+
+                        <select name="coin">
+
+                            <option value="BTC">
+                                Bitcoin (BTC)
+                            </option>
+
+                            <option value="ETH">
+                                Ethereum (ETH)
+                            </option>
+
+                            <option value="SOL">
+                                Solana (SOL)
+                            </option>
+
+                            <option value="XRP">
+                                XRP (XRP)
+                            </option>
+
+                            <option value="BNB">
+                                Binance Coin (BNB)
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <!-- AMOUNT -->
+
+                <div class="input-group">
+
+                    <label>Amount</label>
+
+                    <div class="input-box">
+
+                        <i class="fa-solid fa-coins"></i>
+
+                        <input
+                        type="number"
+                        step="0.0001"
+                        min="0"
+                        name="amount"
+                        placeholder="Enter amount"
+                        required>
+
+                        <span>BTC</span>
+
+                    </div>
+
+                </div>
+
+                <!-- BUY PRICE -->
+
+                <div class="input-group">
+
+                    <label>Buy Price (USD)</label>
+
+                    <div class="input-box">
+
+                        <i class="fa-solid fa-dollar-sign"></i>
+
+                        <input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        name="buy_price"
+                        placeholder="Enter buy price"
+                        required>
+
+                        <span>USD</span>
+
+                    </div>
+
+                </div>
+
+                <!-- BUTTON -->
+
+                <button type="submit" class="add-btn">
+
+                    <i class="fa-solid fa-circle-plus"></i>
+
+                    Add Investment
+
+                </button>
+
+            </form>
+
+        </div>
+
+        <div class="bottom-info">
+
+            <i class="fa-solid fa-circle-info"></i>
+
+            Make sure to enter accurate information for better portfolio tracking.
+
+        </div>
+
+    </div>
+
+</div>
 
 </body>
-
-{% include "navbar.html" %}
 
 </html>
