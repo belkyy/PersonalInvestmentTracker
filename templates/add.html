@@ -18,7 +18,8 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
 
-    <link rel="stylesheet"
+    <link
+    rel="stylesheet"
     href="{{ url_for('static', filename='style2.css') }}">
 
 </head>
@@ -43,6 +44,8 @@
             </div>
 
         </div>
+
+        <!-- MENU -->
 
         <div class="menu">
 
@@ -87,8 +90,15 @@
                 </div>
 
                 <div>
-                    <p>Welcome back,</p>
-                    <span>@{{ session.get('username') }}</span>
+
+                    <p>
+                        Welcome back,
+                    </p>
+
+                    <span>
+                        @{{ session.get('username', 'User') }}
+                    </span>
+
                 </div>
 
             </div>
@@ -108,9 +118,11 @@
 
         <div class="glow-line"></div>
 
-        <!-- FORM CARD -->
+        <!-- CARD -->
 
         <div class="add-card">
+
+            <!-- HEADER -->
 
             <div class="card-header">
 
@@ -119,10 +131,41 @@
                 </div>
 
                 <div>
-                    <h2>Investment Details</h2>
+
+                    <h2>
+                        Investment Details
+                    </h2>
+
                     <p>
                         Fill in the details below to add a new investment.
                     </p>
+
+                </div>
+
+            </div>
+
+            <!-- LIVE PRICE -->
+
+            <div class="live-price-box">
+
+                <div class="price-left">
+
+                    <h3 id="coinName">
+                        Bitcoin (BTC)
+                    </h3>
+
+                    <p>
+                        Live Market Price
+                    </p>
+
+                </div>
+
+                <div class="price-right">
+
+                    <span id="livePrice">
+                        Loading...
+                    </span>
+
                 </div>
 
             </div>
@@ -135,13 +178,17 @@
 
                 <div class="input-group">
 
-                    <label>Select Coin</label>
+                    <label>
+                        Select Coin
+                    </label>
 
                     <div class="input-box">
 
                         <i class="fa-brands fa-bitcoin"></i>
 
-                        <select name="coin">
+                        <select
+                        name="coin"
+                        id="coinSelect">
 
                             <option value="BTC">
                                 Bitcoin (BTC)
@@ -169,35 +216,13 @@
 
                 </div>
 
-                <!-- AMOUNT -->
+                <!-- USD INPUT -->
 
                 <div class="input-group">
 
-                    <label>Amount</label>
-
-                    <div class="input-box">
-
-                        <i class="fa-solid fa-coins"></i>
-
-                        <input
-                        type="number"
-                        step="0.0001"
-                        min="0"
-                        name="amount"
-                        placeholder="Enter amount"
-                        required>
-
-                        <span>BTC</span>
-
-                    </div>
-
-                </div>
-
-                <!-- BUY PRICE -->
-
-                <div class="input-group">
-
-                    <label>Buy Price (USD)</label>
+                    <label>
+                        Investment Amount (USD)
+                    </label>
 
                     <div class="input-box">
 
@@ -207,19 +232,45 @@
                         type="number"
                         step="0.01"
                         min="0"
-                        name="buy_price"
-                        placeholder="Enter buy price"
+                        id="usdInput"
+                        placeholder="Enter USD amount"
                         required>
 
-                        <span>USD</span>
+                        <span>
+                            USD
+                        </span>
 
                     </div>
 
                 </div>
 
+                <!-- RESULT -->
+
+                <div class="result-box">
+
+                    <h2 id="coinResult">
+                        You can buy 0 BTC
+                    </h2>
+
+                </div>
+
+                <!-- HIDDEN VALUES -->
+
+                <input
+                type="hidden"
+                name="amount"
+                id="hiddenAmount">
+
+                <input
+                type="hidden"
+                name="buy_price"
+                id="hiddenBuyPrice">
+
                 <!-- BUTTON -->
 
-                <button type="submit" class="add-btn">
+                <button
+                type="submit"
+                class="add-btn">
 
                     <i class="fa-solid fa-circle-plus"></i>
 
@@ -230,6 +281,8 @@
             </form>
 
         </div>
+
+        <!-- INFO -->
 
         <div class="bottom-info">
 
@@ -242,6 +295,149 @@
     </div>
 
 </div>
+
+<!-- SCRIPT -->
+
+<script>
+
+const coinSelect =
+document.getElementById("coinSelect");
+
+const livePrice =
+document.getElementById("livePrice");
+
+const usdInput =
+document.getElementById("usdInput");
+
+const coinResult =
+document.getElementById("coinResult");
+
+const coinName =
+document.getElementById("coinName");
+
+const hiddenAmount =
+document.getElementById("hiddenAmount");
+
+const hiddenBuyPrice =
+document.getElementById("hiddenBuyPrice");
+
+let currentPrice = 0;
+
+/* API COIN IDS */
+
+const apiCoins = {
+
+    BTC: "bitcoin",
+
+    ETH: "ethereum",
+
+    SOL: "solana",
+
+    XRP: "ripple",
+
+    BNB: "binancecoin"
+};
+
+/* LABELS */
+
+const coinLabels = {
+
+    BTC: "Bitcoin (BTC)",
+
+    ETH: "Ethereum (ETH)",
+
+    SOL: "Solana (SOL)",
+
+    XRP: "XRP (XRP)",
+
+    BNB: "Binance Coin (BNB)"
+};
+
+async function fetchPrice(){
+
+    const coin =
+    coinSelect.value;
+
+    const apiCoin =
+    apiCoins[coin];
+
+    const url =
+    `https://api.coingecko.com/api/v3/simple/price?ids=${apiCoin}&vs_currencies=usd`;
+
+    try{
+
+        const response =
+        await fetch(url);
+
+        const data =
+        await response.json();
+
+        currentPrice =
+        data[apiCoin].usd;
+
+        livePrice.innerText =
+        "$" + currentPrice.toLocaleString();
+
+        coinName.innerText =
+        coinLabels[coin];
+
+        updateCalculation();
+
+    }catch(error){
+
+        livePrice.innerText =
+        "Error loading price";
+    }
+
+}
+
+function updateCalculation(){
+
+    const usd =
+    parseFloat(usdInput.value);
+
+    const symbol =
+    coinSelect.value;
+
+    if(!usd || currentPrice === 0){
+
+        coinResult.innerText =
+        `You can buy 0 ${symbol}`;
+
+        hiddenAmount.value = 0;
+
+        hiddenBuyPrice.value = 0;
+
+        return;
+    }
+
+    const amount =
+    usd / currentPrice;
+
+    hiddenAmount.value =
+    amount;
+
+    hiddenBuyPrice.value =
+    currentPrice;
+
+    coinResult.innerText =
+    `You can buy ${amount.toFixed(6)} ${symbol}`;
+
+}
+
+coinSelect.addEventListener(
+"change",
+fetchPrice
+);
+
+usdInput.addEventListener(
+"input",
+updateCalculation
+);
+
+fetchPrice();
+
+</script>
 
 </body>
 

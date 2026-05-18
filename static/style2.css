@@ -612,3 +612,62 @@ tr:hover{
 
     color:#8b5cf6;
 }
+
+.live-price-box{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:35px;
+
+    padding:22px 25px;
+
+    border-radius:22px;
+
+    background:
+    linear-gradient(
+    to right,
+    rgba(37,99,235,.15),
+    rgba(124,58,237,.12)
+    );
+
+    border:1px solid rgba(255,255,255,.08);
+}
+
+.price-left h3{
+    font-size:24px;
+    margin-bottom:5px;
+}
+
+.price-left p{
+    color:#94a3b8;
+}
+
+.price-right span{
+    font-size:34px;
+    font-weight:700;
+
+    background:
+    linear-gradient(to right,#3b82f6,#8b5cf6);
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.result-box{
+    margin-top:10px;
+
+    padding:25px;
+
+    border-radius:20px;
+
+    background:rgba(255,255,255,.03);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    text-align:center;
+}
+
+.result-box h2{
+    font-size:28px;
+}
