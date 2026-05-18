@@ -42,6 +42,7 @@ def dashboard():
 
     return render_template(
         "dashboard.html",
+        
         **portfolio_data
     )
 
