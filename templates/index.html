@@ -11,6 +11,20 @@
 </head>
 
 <body>
+    {% if username %}
+    <div class="top-user-bar">
+
+        <p>
+            Welcome, {{ username }} 👋
+        </p>
+
+        <a href="/logout">
+            Logout
+        </a>
+
+    </div>
+    {% endif %}
+
     <div class="hero-container">
 
     <div class="hero-left">
@@ -38,7 +52,18 @@
         </p>
 
         <div class="hero-buttons">
-            <a href = "/login" class="primary-btn">Get Started</a>
+            {% if username %}
+            <a href="/dashboard" class="primary-btn">
+                Continue Dashboard
+            </a>
+
+            {% else %}
+            <a href="/login" class="primary-btn">
+                Get Started
+            </a>
+
+            {% endif %}
+
             <a href = "/learn" class="secondary-btn">Learn More</a>
         </div>
 

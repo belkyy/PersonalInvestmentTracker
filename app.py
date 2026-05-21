@@ -12,7 +12,23 @@ def get_connection():
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    user = None
+
+    if "user_id" in session:
+
+        conn = get_connection()
+
+        user = conn.execute(
+            "SELECT * FROM users WHERE id=?",
+            (session["user_id"],)
+        ).fetchone()
+
+        conn.close()
+
+    return render_template(
+        "index.html",
+        username=user["username"] if user else None
+    )
 
 @app.route('/learn')
 def learn():
@@ -42,8 +58,8 @@ def dashboard():
 
     return render_template(
         "dashboard.html",
-        
-        **portfolio_data
+        **portfolio_data,
+        user = session.get("username", "User")
     )
 
 @app.route("/delete/<int:id>")
